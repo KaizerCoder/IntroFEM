@@ -1,0 +1,4 @@
+{
+  "python.analysis.extraPaths": ["Ferramentas"],
+  "python.envFile": "${workspaceFolder}/.vscode/.env"
+}
