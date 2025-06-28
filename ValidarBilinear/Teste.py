@@ -1,5 +1,5 @@
 import numpy as np
-import BiLinearIso4Nos as BL4
+import Elementos2D as BL4
 
 
 #Entrada de Dados 

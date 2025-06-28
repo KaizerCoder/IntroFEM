@@ -1,8 +1,8 @@
 import numpy as np
-import BiLinearIso4Nos as BL4
+import Elementos2D as BL4
 import sympy as sp
 import meshio
-import GeraBarraGmsh
+import Malha2D
 
 
 #Entrada de Dados 
@@ -20,11 +20,11 @@ cargas = [("CARGA",2,1)]
 
 n = 2
 arquivo = "barraFlexaoBolha.msh"
-GeraBarraGmsh.gerar_barra_api_flexao(arquivo,L=1,h=0.1,nx=10*n,ny=n)
-nn, XY, ne, IJ, MAT, ESP, na, AP, nc, P = GeraBarraGmsh.processar_malha2D(arquivo,Materiais,apoios,cargas,espessura=0.1)
+Malha2D.Gerar_viga_flexao(arquivo,L=1,h=0.1,nx=10*n,ny=n)
+nn, XY, ne, IJ, MAT, ESP, na, AP, nc, P = Malha2D.Processar_malha2D(arquivo,Materiais,apoios,cargas,espessura=0.1)
 
 #Monta Rigidez Global
-K_b = BL4.RigidezGlobalBolha(nn,ne,MAT,ESP,XY,IJ)
+K_b = BL4.RigidezGlobal(nn,ne,MAT,ESP,XY,IJ,bolha=True)
 #Monta Força Global
 F_b = BL4.ForcapGlobal(nn,ESP,XY,IJ,nc,P)
 #Aplica as CChs homogêneas
@@ -37,10 +37,12 @@ print(U[5])
 
 
 #Calcula a Tensão ao longo dos elementos
-Sigma = BL4.CalculaTensaoMalhaBolha(nn,ne,MAT,ESP,XY,IJ,U)
+Sigma = BL4.CalculaTensaoMalha(nn,ne,MAT,ESP,XY,IJ,U,bolha=True)
 
+
+detJ = BL4.CalculaDetJ(ne,XY,IJ)
 
 #Calcula Von Mises
 TVM = BL4.TensaoVonMises2D(ne,Sigma)
 
-GeraBarraGmsh.export_to_gmsh_post(arquivo, XY, U, TVM,IJ )
+Malha2D.export_to_gmsh_post(arquivo, XY, U, TVM,IJ,detJ)
