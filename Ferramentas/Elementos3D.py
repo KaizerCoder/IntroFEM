@@ -87,7 +87,7 @@ def MontaKe(X,Y,E,v,te):
     return Ke
 
 def MontaXY(e,IJ,XY):
-    nos = IJ[e] -1
+    nos = IJ[e-1]
     
     X = np.zeros((nos.size))
     Y = np.zeros((nos.size))
@@ -96,17 +96,16 @@ def MontaXY(e,IJ,XY):
     
     for i in range(nos.size):
         #Nó
-        no = nos[i]
+        no = IJ[e-1,i]
         #Coordenadas
-        X[i] = XY[no,0]
-        Y[i] = XY[no,1]
+        X[i] = XY[no-1,0]
+        Y[i] = XY[no-1,1]
         
     return X,Y
 
 def Montagls(e,IJ):
-    #Input e é 0 Based
     #Inicializa vetor
-    nos = IJ[e] -1
+    nos = IJ[e-1]
 
     gls = np.zeros((2*nos.size,1))      
     c = 0
@@ -116,7 +115,7 @@ def Montagls(e,IJ):
         no = nos[i]
         #Laço pelos graus de liberdade dos nós:
         for j in range(2):
-            gls[c] =  int(2*(no)+j)
+            gls[c] =  int(2*(no-1)+j)
             c+=1
     
     return gls
@@ -250,7 +249,7 @@ def ForcapGlobal(nn,ESP,XY,IJ,nc,P):
         #Força numa face
         else:
             #Determina os gls do elemento
-            g =  Montagls(ele-1,IJ)
+            g =  Montagls(ele,IJ)
             #Espessura do elemento
             te = ESP[ele-1]
             
@@ -317,7 +316,7 @@ def CalculaTensaoMalha(nn,ne,MAT,ESP,XY,IJ,U,bolha=False):
         # Recupera as coordenadas do elemento:
         X,Y = MontaXY(e,IJ,XY)
         # Determina os gdls globais do elemento
-        g = Montagls(e,IJ)
+        g = Montagls(e+1,IJ)
         
         Ue = np.zeros((g.size,1))
 
@@ -554,7 +553,7 @@ def CalculaTensaoMalhaBolha(nn,ne,MAT,ESP,XY,IJ,U):
         # Recupera as coordenadas do elemento:
         X,Y = MontaXY(e,IJ,XY)
         # Determina os gdls globais do elemento
-        g = Montagls(e,IJ)
+        g = Montagls(e+1,IJ)
         
         for i in range(8):
             Ue[i] = U[int(g[i])]

@@ -12,8 +12,10 @@ Materiais = {"MAT1":[1e9,0.3]}
 apoios = {"Sx":"x","Sy":"y"}
 cargas = [("CARGA",1,1000)]
 
-Malha2D.gerar_barra_tracao("barraTracao3.msh",L=1,h=0.1,nx=2,ny=2)
-nn, XY, ne, IJ, MAT, ESP, na, AP, nc, P = Malha2D.processar_malhappp("barraTracao3.msh",Materiais,apoios,cargas)
+arquivo = "barraTracao3.msh"
+
+Malha2D.Gerar_barra_tracao(arquivo,L=1,h=0.1,nx=2,ny=2)
+nn, XY, ne, IJ, MAT, ESP, na, AP, nc, P = Malha2D.Processar_malha2D(arquivo,Materiais,apoios,cargas,espessura=0.1)
 
 #Monta Rigidez Global
 K_b = BL4.RigidezGlobal(nn,ne,MAT,ESP,XY,IJ)
@@ -38,4 +40,6 @@ Sigma = BL4.CalculaTensaoMalha(nn,ne,MAT,ESP,XY,IJ,U)
 TVM = BL4.TensaoVonMises2D(ne,Sigma)
 
 
-Malha2D.export_to_gmsh_post("BarraResultado3.msh", XY, U, TVM,IJ )
+Malha2D.Exporta_para_Gmsh(arquivo,IJ, XY, U, TVM)
+
+Malha2D.AbreVisualizacaoGmsh(arquivo)

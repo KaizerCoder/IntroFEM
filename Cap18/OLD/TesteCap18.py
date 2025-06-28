@@ -8,16 +8,19 @@ import Malha2D
 #Entrada de Dados 
 
 # #Gera Malha(básica)
+arquivo = 'ChapaCompleta.msh'
+
 Materiais = {"MAT1":[1e9,0.3]}
 apoios = {}
 cargas = [("CARGA1",1,1000),("CARGA2",1,1000)]
 
-arquivo = 'Chapacompleta.msh'
-Malha2D.gerar_malha_chapa_completa_gmsh(nome_arquivo=arquivo, L=1.0, D=0.1, h_fino=0.01, h_grosso=0.03,quadrilateral=False, show_gui=False)
+
+Malha2D.Gerar_chapa_tracao_completa(nome_arquivo=arquivo, L=1.0, D=0.1, h_fino=0.01, h_grosso=0.05)
 nn, XY, ne, IJ, MAT, ESP, na, AP, nc, P = Malha2D.Processar_malha2D(arquivo,Materiais,apoios,cargas,espessura=0.01)
 
-#Entrada de Dados 
+# #Entrada de Dados 
 
+# arquivo = 'Triangulo.msh'
 # #Número de nós
 # nn = 6
 # XY = np.array([[0.0,0.0],[0.5,0.0],[1.0,0.0],[0.0,0.1],[0.5,0.1],[1.0,0.1]])
@@ -61,5 +64,5 @@ detJ = BL4.CalculaDetJ(ne,XY,IJ)
 TVM = BL4.TensaoVonMises2D(ne,Sigma)
 
 Malha2D.Exporta_para_Gmsh(arquivo,IJ, XY, U, TVM,detJ)
-Malha2D.AbriVisualizacaoGmsh(arquivo)
+Malha2D.AbreVisualizacaoGmsh(arquivo)
 # Malha2D.Exporta_e_abre_gmsh(arquivo,IJ, XY, U, TVM,detJ)
